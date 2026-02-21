@@ -16,15 +16,16 @@ final appRouter = GoRouter(
       routes: [
         GoRoute(
           path: '/',
-          pageBuilder: (context, state) => _buildPage(const HomePage()),
+          pageBuilder: (context, state) => _buildPage(state, const HomePage()),
         ),
         GoRoute(
           path: '/projects',
-          pageBuilder: (context, state) => _buildPage(const ProjectsPage()),
+          pageBuilder: (context, state) =>
+              _buildPage(state, const ProjectsPage()),
         ),
         GoRoute(
           path: '/about',
-          pageBuilder: (context, state) => _buildPage(const AboutPage()),
+          pageBuilder: (context, state) => _buildPage(state, const AboutPage()),
         ),
       ],
     ),
@@ -32,11 +33,16 @@ final appRouter = GoRouter(
 );
 
 // Хелпер: создает страницу с непрозрачным фоном автоматически
-Page<dynamic> _buildPage(Widget child) {
+Page<dynamic> _buildPage(GoRouterState state, Widget child) {
   return CustomTransitionPage(
+    key: state.pageKey, // ВАЖНО: Ключ сообщает роутеру, что это новая страница
     child: Scaffold(body: child),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      return FadeTransition(opacity: animation, child: child);
+      // Добавим кривую (Curve) для более плавного и естественного эффекта
+      return FadeTransition(
+        opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+        child: child,
+      );
     },
     transitionDuration: const Duration(milliseconds: 400),
   );

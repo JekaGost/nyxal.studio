@@ -46,7 +46,19 @@ class MainLayout extends StatelessWidget {
         ],
       ),
       // Оборачиваем child в Center или Container по вкусу
-      body: child,
+      body: AnimatedSwitcher(
+        duration: const Duration(
+          milliseconds: 1500,
+        ), // Общее время: исчезновение + пауза + появление
+        // Кривая (0.7, 1.0) означает, что анимация прозрачности происходит только
+        // на краях временного отрезка, оставляя большую паузу в середине.
+        switchInCurve: const Interval(0.7, 1.0, curve: Curves.easeInOut),
+        switchOutCurve: const Interval(0.7, 1.0, curve: Curves.easeInOut),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: child,
+      ),
     );
   }
 }

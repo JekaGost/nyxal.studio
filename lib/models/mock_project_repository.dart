@@ -5,8 +5,7 @@ import 'project_repository.dart';
 class MockProjectRepository implements ProjectRepository {
   @override
   Future<List<Project>> getProjects() async {
-    // Имитируем задержку сети (например, 1 секунда), чтобы увидеть индикатор загрузки
-    await Future.delayed(const Duration(seconds: 1));
+    // Возвращаем данные мгновенно, чтобы не было лишнего лоадера при переходе
     return mockProjects;
   }
 }

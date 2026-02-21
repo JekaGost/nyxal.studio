@@ -34,16 +34,6 @@ final appRouter = GoRouter(
 
 // Хелпер: создает страницу с непрозрачным фоном автоматически
 Page<dynamic> _buildPage(GoRouterState state, Widget child) {
-  return CustomTransitionPage(
-    key: state.pageKey, // ВАЖНО: Ключ сообщает роутеру, что это новая страница
-    child: Scaffold(body: child),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      // Добавим кривую (Curve) для более плавного и естественного эффекта
-      return FadeTransition(
-        opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-        child: child,
-      );
-    },
-    transitionDuration: const Duration(milliseconds: 400),
-  );
+  // Используем NoTransitionPage, так как анимацию теперь обрабатывает MainLayout
+  return NoTransitionPage(child: Scaffold(body: child));
 }

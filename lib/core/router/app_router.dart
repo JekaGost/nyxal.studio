@@ -35,5 +35,11 @@ final appRouter = GoRouter(
 // Хелпер: создает страницу с непрозрачным фоном автоматически
 Page<dynamic> _buildPage(GoRouterState state, Widget child) {
   // Используем NoTransitionPage, так как анимацию теперь обрабатывает MainLayout
-  return NoTransitionPage(child: Scaffold(body: child));
+  return NoTransitionPage(
+    child: Scaffold(
+      key: state
+          .pageKey, // ВАЖНО: Ключ заставляет AnimatedSwitcher видеть смену страниц
+      body: child,
+    ),
+  );
 }

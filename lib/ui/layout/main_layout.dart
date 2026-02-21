@@ -52,8 +52,10 @@ class MainLayout extends StatelessWidget {
         ), // Общее время: исчезновение + пауза + появление
         // Кривая (0.7, 1.0) означает, что анимация прозрачности происходит только
         // на краях временного отрезка, оставляя большую паузу в середине.
-        switchInCurve: const Interval(0.7, 1.0, curve: Curves.easeInOut),
-        switchOutCurve: const Interval(0.7, 1.0, curve: Curves.easeInOut),
+        // Новая страница появляется только в конце (после 65% времени)
+        switchInCurve: const Interval(0.65, 1.0, curve: Curves.easeOut),
+        // Старая страница исчезает сразу же (в первые 35% времени)
+        switchOutCurve: const Interval(0.0, 0.35, curve: Curves.easeIn),
         transitionBuilder: (child, animation) {
           return FadeTransition(opacity: animation, child: child);
         },

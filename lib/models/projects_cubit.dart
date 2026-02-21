@@ -9,7 +9,7 @@ class ProjectsCubit extends Cubit<ProjectsState> {
 
   Future<void> loadProjects() async {
     try {
-      emit(const ProjectsState.loading());
+      // Убираем emit(loading), чтобы не было мелькания спиннера на быстрых данных
       final projects = await _repository.getProjects();
       if (!isClosed) emit(ProjectsState.loaded(projects));
     } catch (e) {

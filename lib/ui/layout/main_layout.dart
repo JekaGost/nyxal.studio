@@ -53,7 +53,7 @@ class MainLayout extends StatelessWidget {
         // Настраиваем кривые здесь.
         // switchOutCurve управляет исчезновением (реверс 1.0 -> 0.0).
         // Interval(0.55, 1.0) означает, что исчезновение произойдет в первые 45% времени.
-        switchOutCurve: const Interval(0.55, 1.0, curve: Curves.easeIn),
+        switchOutCurve: const Interval(0.55, 1.0, curve: Curves.easeInOut),
         // switchInCurve управляет появлением (0.0 -> 1.0).
         // Interval(0.55, 1.0) означает, что появление начнется после 55% времени (пауза).
         switchInCurve: const Interval(0.55, 1.0, curve: Curves.easeOut),

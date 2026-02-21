@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../repositories/project_repository.dart';
+import 'project_repository.dart';
 import 'projects_state.dart';
 
 class ProjectsCubit extends Cubit<ProjectsState> {

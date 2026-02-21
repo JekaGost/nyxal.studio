@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
 class MainLayout extends StatelessWidget {
@@ -51,20 +50,23 @@ class MainLayout extends StatelessWidget {
         duration: const Duration(
           milliseconds: 1500,
         ), // Общее время: исчезновение + пауза + появление
+        // Настраиваем кривые здесь.
+        // switchOutCurve управляет исчезновением (реверс 1.0 -> 0.0).
+        // Interval(0.55, 1.0) означает, что исчезновение произойдет в первые 45% времени.
+        switchOutCurve: const Interval(0.55, 1.0, curve: Curves.easeIn),
+        // switchInCurve управляет появлением (0.0 -> 1.0).
+        // Interval(0.55, 1.0) означает, что появление начнется после 55% времени (пауза).
+        switchInCurve: const Interval(0.55, 1.0, curve: Curves.easeOut),
         transitionBuilder: (child, animation) {
-          // Используем стандартные виджеты Flutter для стабильности
-          // Создаем кривую с паузой: анимация начнется только после 65% времени
-          final curvedAnimation = CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0.65, 1.0, curve: Curves.easeOut),
-          );
-
           return SlideTransition(
             position: Tween<Offset>(
-              begin: const Offset(0, 0.1), // Легкий сдвиг снизу вверх (10%)
+              begin: const Offset(
+                0,
+                0.05,
+              ), // Уменьшили сдвиг до 5%, чтобы было плавнее
               end: Offset.zero,
-            ).animate(curvedAnimation),
-            child: FadeTransition(opacity: curvedAnimation, child: child),
+            ).animate(animation),
+            child: FadeTransition(opacity: animation, child: child),
           );
         },
         child: child,

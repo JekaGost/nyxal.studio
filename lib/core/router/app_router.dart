@@ -33,11 +33,11 @@ final appRouter = GoRouter(
 
 // Хелпер: создает страницу с непрозрачным фоном автоматически
 Page<dynamic> _buildPage(Widget child) {
-  return MaterialPage(
-    child: Scaffold(
-      // Scaffold автоматически берет цвет фона из темы (Theme.of(context).scaffoldBackgroundColor)
-      // Это гарантирует, что страница будет непрозрачной при анимации перехода
-      body: child,
-    ),
+  return CustomTransitionPage(
+    child: Scaffold(body: child),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(opacity: animation, child: child);
+    },
+    transitionDuration: const Duration(milliseconds: 400),
   );
 }

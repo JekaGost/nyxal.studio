@@ -11,9 +11,10 @@ class ProjectsCubit extends Cubit<ProjectsState> {
     try {
       emit(const ProjectsState.loading());
       final projects = await _repository.getProjects();
-      emit(ProjectsState.loaded(projects));
+      if (!isClosed) emit(ProjectsState.loaded(projects));
     } catch (e) {
-      emit(const ProjectsState.error('Не удалось загрузить проекты'));
+      if (!isClosed)
+        emit(const ProjectsState.error('Не удалось загрузить проекты'));
     }
   }
 }

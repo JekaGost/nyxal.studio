@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/layout/main_layout.dart';
 import '../../ui/pages/about_page.dart';
@@ -13,13 +14,30 @@ final appRouter = GoRouter(
         return MainLayout(child: child);
       },
       routes: [
-        GoRoute(path: '/', builder: (context, state) => const HomePage()),
+        GoRoute(
+          path: '/',
+          pageBuilder: (context, state) => _buildPage(const HomePage()),
+        ),
         GoRoute(
           path: '/projects',
-          builder: (context, state) => const ProjectsPage(),
+          pageBuilder: (context, state) => _buildPage(const ProjectsPage()),
         ),
-        GoRoute(path: '/about', builder: (context, state) => const AboutPage()),
+        GoRoute(
+          path: '/about',
+          pageBuilder: (context, state) => _buildPage(const AboutPage()),
+        ),
       ],
     ),
   ],
 );
+
+// Хелпер: создает страницу с непрозрачным фоном автоматически
+Page<dynamic> _buildPage(Widget child) {
+  return MaterialPage(
+    child: Scaffold(
+      // Scaffold автоматически берет цвет фона из темы (Theme.of(context).scaffoldBackgroundColor)
+      // Это гарантирует, что страница будет непрозрачной при анимации перехода
+      body: child,
+    ),
+  );
+}

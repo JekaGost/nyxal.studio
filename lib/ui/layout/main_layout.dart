@@ -52,14 +52,20 @@ class MainLayout extends StatelessWidget {
           milliseconds: 1500,
         ), // Общее время: исчезновение + пауза + появление
         transitionBuilder: (child, animation) {
-          // Используем flutter_animate для управления таймингами
-          return child
-              .animate(adapter: Adapter.create(animation))
-              // Появляемся только после 65% времени (пауза в начале для входящего)
-              // Исчезаем в первые 35% времени (пауза в конце для исходящего)
-              .fadeIn(curve: Curves.easeOut, begin: 0.65)
-              // Добавляем легкий сдвиг снизу вверх (параллакс) для красоты
-              .slideY(begin: 0.1, end: 0, curve: Curves.easeOut, begin: 0.65);
+          // Используем стандартные виджеты Flutter для стабильности
+          // Создаем кривую с паузой: анимация начнется только после 65% времени
+          final curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: const Interval(0.65, 1.0, curve: Curves.easeOut),
+          );
+
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.1), // Легкий сдвиг снизу вверх (10%)
+              end: Offset.zero,
+            ).animate(curvedAnimation),
+            child: FadeTransition(opacity: curvedAnimation, child: child),
+          );
         },
         child: child,
       ),

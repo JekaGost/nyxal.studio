@@ -54,8 +54,9 @@ class MainLayout extends StatelessWidget {
         // на краях временного отрезка, оставляя большую паузу в середине.
         // Новая страница появляется только в конце (после 65% времени)
         switchInCurve: const Interval(0.65, 1.0, curve: Curves.easeOut),
-        // Старая страница исчезает сразу же (в первые 35% времени)
-        switchOutCurve: const Interval(0.0, 0.35, curve: Curves.easeIn),
+        // Старая страница должна исчезнуть быстро. Используем тот же интервал 0.65-1.0,
+        // так как для исходящего виджета анимация проигрывается "задом наперед" (от 1.0 к 0.0).
+        switchOutCurve: const Interval(0.65, 1.0, curve: Curves.easeIn),
         transitionBuilder: (child, animation) {
           return FadeTransition(opacity: animation, child: child);
         },

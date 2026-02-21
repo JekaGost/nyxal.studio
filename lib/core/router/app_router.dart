@@ -11,7 +11,12 @@ final appRouter = GoRouter(
     ShellRoute(
       // ShellRoute оборачивает все вложенные роуты в наш MainLayout
       builder: (context, state, child) {
-        return MainLayout(child: child);
+        // Оборачиваем child в KeyedSubtree с ключом страницы.
+        // Это ОБЯЗАТЕЛЬНО, чтобы AnimatedSwitcher в MainLayout увидел изменение
+        // и запустил анимацию перехода.
+        return MainLayout(
+          child: KeyedSubtree(key: state.pageKey, child: child),
+        );
       },
       routes: [
         GoRoute(

@@ -12,7 +12,7 @@ part of 'project.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$Project {
+mixin _$Project implements DiagnosticableTreeMixin {
 
  String get id; String get title; String get shortDescription; String get fullDescription; List<String> get tags;// Например: ['Flutter', 'Dart'] или ['Unity', 'C#']
  String? get imageUrl;// Ссылка на картинку (может быть null)
@@ -24,6 +24,12 @@ mixin _$Project {
 $ProjectCopyWith<Project> get copyWith => _$ProjectCopyWithImpl<Project>(this as Project, _$identity);
 
 
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'Project'))
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('shortDescription', shortDescription))..add(DiagnosticsProperty('fullDescription', fullDescription))..add(DiagnosticsProperty('tags', tags))..add(DiagnosticsProperty('imageUrl', imageUrl))..add(DiagnosticsProperty('projectUrl', projectUrl));
+}
 
 @override
 bool operator ==(Object other) {
@@ -35,7 +41,7 @@ bool operator ==(Object other) {
 int get hashCode => Object.hash(runtimeType,id,title,shortDescription,fullDescription,const DeepCollectionEquality().hash(tags),imageUrl,projectUrl);
 
 @override
-String toString() {
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
   return 'Project(id: $id, title: $title, shortDescription: $shortDescription, fullDescription: $fullDescription, tags: $tags, imageUrl: $imageUrl, projectUrl: $projectUrl)';
 }
 
@@ -213,7 +219,7 @@ return $default(_that.id,_that.title,_that.shortDescription,_that.fullDescriptio
 /// @nodoc
 
 
-class _Project implements Project {
+class _Project with DiagnosticableTreeMixin implements Project {
   const _Project({required this.id, required this.title, required this.shortDescription, required this.fullDescription, required final  List<String> tags, this.imageUrl, this.projectUrl}): _tags = tags;
   
 
@@ -240,6 +246,12 @@ class _Project implements Project {
 _$ProjectCopyWith<_Project> get copyWith => __$ProjectCopyWithImpl<_Project>(this, _$identity);
 
 
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  properties
+    ..add(DiagnosticsProperty('type', 'Project'))
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('title', title))..add(DiagnosticsProperty('shortDescription', shortDescription))..add(DiagnosticsProperty('fullDescription', fullDescription))..add(DiagnosticsProperty('tags', tags))..add(DiagnosticsProperty('imageUrl', imageUrl))..add(DiagnosticsProperty('projectUrl', projectUrl));
+}
 
 @override
 bool operator ==(Object other) {
@@ -251,7 +263,7 @@ bool operator ==(Object other) {
 int get hashCode => Object.hash(runtimeType,id,title,shortDescription,fullDescription,const DeepCollectionEquality().hash(_tags),imageUrl,projectUrl);
 
 @override
-String toString() {
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
   return 'Project(id: $id, title: $title, shortDescription: $shortDescription, fullDescription: $fullDescription, tags: $tags, imageUrl: $imageUrl, projectUrl: $projectUrl)';
 }
 

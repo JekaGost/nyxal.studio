@@ -5,8 +5,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Афиша Nyxal Studio', style: TextStyle(fontSize: 24)),
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: const Center(
+        child: Text('Афиша Nyxal Studio', style: TextStyle(fontSize: 24)),
+      ),
     );
   }
 }

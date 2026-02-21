@@ -1,12 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../models/mock_project_repository.dart';
+import '../../models/project.dart';
+import '../../models/projects_cubit.dart';
+import '../../models/projects_state.dart';
 
 class ProjectsPage extends StatelessWidget {
   const ProjectsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Наши Проекты', style: TextStyle(fontSize: 24)),
+    // Внедряем Cubit. Используем MockProjectRepository.
+    return BlocProvider(
+      create: (context) =>
+          ProjectsCubit(MockProjectRepository())..loadProjects(),
+      child: const _ProjectsView(),
+    );
+  }
+}
+
+class _ProjectsView extends StatelessWidget {
+  const _ProjectsView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // ВАЖНО: Используем цвет фона темы, чтобы перекрыть предыдущий экран
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: BlocBuilder<ProjectsCubit, ProjectsState>(
+        builder: (context, state) {
+          return state.when(
+            // Явно задаем белый цвет для индикатора
+            initial: () => const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
+            loading: () => const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
+            error: (message) => Center(
+              child: Text(
+                'Ошибка: $message',
+                style: const TextStyle(color: Colors.red),
+              ),
+            ),
+            loaded: (projects) => ListView.builder(
+              padding: const EdgeInsets.all(20),
+              itemCount: projects.length,
+              itemBuilder: (context, index) =>
+                  _ProjectCard(project: projects[index]),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ProjectCard extends StatelessWidget {
+  final Project project;
+  const _ProjectCard({required this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 20),
+      color: const Color(0xFF1E1E1E),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          if (project.projectUrl != null)
+            launchUrl(Uri.parse(project.projectUrl!));
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                project.title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                project.shortDescription,
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: project.tags
+                    .map(
+                      (tag) => Chip(
+                        label: Text(tag, style: const TextStyle(fontSize: 10)),
+                        backgroundColor: Colors.black54,
+                        padding: EdgeInsets.zero,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

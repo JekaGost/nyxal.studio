@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
 class MainLayout extends StatelessWidget {
@@ -50,15 +51,15 @@ class MainLayout extends StatelessWidget {
         duration: const Duration(
           milliseconds: 1500,
         ), // Общее время: исчезновение + пауза + появление
-        // Кривая (0.7, 1.0) означает, что анимация прозрачности происходит только
-        // на краях временного отрезка, оставляя большую паузу в середине.
-        // Новая страница появляется только в конце (после 65% времени)
-        switchInCurve: const Interval(0.65, 1.0, curve: Curves.easeOut),
-        // Старая страница должна исчезнуть быстро. Используем тот же интервал 0.65-1.0,
-        // так как для исходящего виджета анимация проигрывается "задом наперед" (от 1.0 к 0.0).
-        switchOutCurve: const Interval(0.65, 1.0, curve: Curves.easeIn),
         transitionBuilder: (child, animation) {
-          return FadeTransition(opacity: animation, child: child);
+          // Используем flutter_animate для управления таймингами
+          return child
+              .animate(adapter: Adapter.create(animation))
+              // Появляемся только после 65% времени (пауза в начале для входящего)
+              // Исчезаем в первые 35% времени (пауза в конце для исходящего)
+              .fadeIn(curve: Curves.easeOut, begin: 0.65)
+              // Добавляем легкий сдвиг снизу вверх (параллакс) для красоты
+              .slideY(begin: 0.1, end: 0, curve: Curves.easeOut, begin: 0.65);
         },
         child: child,
       ),

@@ -11,11 +11,10 @@ final appRouter = GoRouter(
     ShellRoute(
       // ShellRoute оборачивает все вложенные роуты в наш MainLayout
       builder: (context, state, child) {
-        // Оборачиваем child в KeyedSubtree с ключом страницы.
-        // Это ОБЯЗАТЕЛЬНО, чтобы AnimatedSwitcher в MainLayout увидел изменение
-        // и запустил анимацию перехода.
+        // Используем ValueKey с путем (например, '/projects'), чтобы точно
+        // триггерить анимацию при смене URL.
         return MainLayout(
-          child: KeyedSubtree(key: state.pageKey, child: child),
+          child: KeyedSubtree(key: ValueKey(state.uri.path), child: child),
         );
       },
       routes: [
@@ -42,8 +41,7 @@ Page<dynamic> _buildPage(GoRouterState state, Widget child) {
   // Используем NoTransitionPage, так как анимацию теперь обрабатывает MainLayout
   return NoTransitionPage(
     child: Scaffold(
-      key: state
-          .pageKey, // ВАЖНО: Ключ заставляет AnimatedSwitcher видеть смену страниц
+      // Убираем ключ отсюда, он уже есть в ShellRoute (KeyedSubtree)
       body: child,
     ),
   );
